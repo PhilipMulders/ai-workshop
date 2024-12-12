@@ -12,4 +12,18 @@ class ChatCompletionRequest
         public readonly string $model = 'meta-llama/Llama-3.3-70B-Instruct-Turbo',
         public array $messages = [],
     ) {}
+
+    public function getMessages(): array 
+    {
+        return [
+            [
+                'role' => 'system',
+                'content' => $this->system,
+            ],
+            [
+                'role' => 'user',
+                'content' => $this->prompt,
+            ]
+        ];
+    }
 }

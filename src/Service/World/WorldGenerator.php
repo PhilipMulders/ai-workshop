@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Service\World;
 
 use App\TogetherAI\TogetherClient;
+use App\TogetherAI\Request\ChatCompletionRequest;
 
 final class WorldGenerator
 {
-    public const string SYSTEM = "
+    public const SYSTEM = "
         Your job is to help create interesting fantasy worlds that players would love to play in.
 
         Instructions:
@@ -27,6 +28,24 @@ final class WorldGenerator
      */
     public function generate(string $prompt): array
     {
+        $message = "
+            $prompt
+
+            Output content in the form:
+            World Name: <WORLD NAME>
+            World Description: <WORLD DESCRIPTION>
+        ";
+
+        $request = new ChatCompletionRequest(self::SYSTEM, $message);
+        // Prompt
+        // System msg
+
+        $responds = $this->client->createChatCompletion($request);
+
+        echo "<pre>";
+        var_dump($responds);
+        echo "</pre>";
+
         return ['TODO'];
     }
 

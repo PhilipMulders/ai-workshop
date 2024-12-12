@@ -16,8 +16,20 @@ final readonly class TogetherClient
 
     public function createChatCompletion(ChatCompletionRequest $request): string
     {
-        $response = $this->client->request('POST', '< the request endpoint >', [
-            'json' => [/* < the request body > */]
+        //https://api.together.xyz/v1/
+        $response = $this->client->request('POST', 'chat/completions', [
+            'verify' => false,
+            'json' => [
+                "model" => $request->model,
+                "messages" => $request->getMessages(),
+                "max_tokens" => null,                                                         # | < ------------------
+                "temperature" => 0.2,                                                           # |  These can be moved
+                "top_p" => 0.7,                                                               # |  to a config object
+                "top_k" => 50,                                                                # |
+                "repetition_penalty" => 1,                                                    # |
+                "stop" => ["<|eot_id|>","<|eom_id|>"],                                        # | -------------------->
+                "stream" => true,
+            ],
         ]);
 
         return $this->responseParser->parse($response->getBody()->getContents());
